@@ -11,7 +11,7 @@ stage 'Test build'
 
 stage('SonarQube analysis') {
     // requires SonarQube Scanner 2.8+
-    def scannerHome = tool 'SonarQubeScanner';
+    def scannerHome = tool 'SonarQube Scanner';
     sh "ls -la"
     withSonarQubeEnv('SonarQube') {
       sh "${scannerHome}/bin/sonar-scanner -D sonar.projectKey=${appname} -D sonar.sources=src/php/"
