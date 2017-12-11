@@ -15,8 +15,41 @@
 3 directories, 8 files  
 
 traefik :  
+
+# Traefik tutorial: https://www.digitalocean.com/community/tutorials/how-to-use-traefik-as-a-reverse-proxy-for-docker-containers-on-ubuntu-16-04
+
+# Traefik providers:  -
+#	- web (which gives you access to a dashboard interface)
+#       - docker 
+#	- acme (which is used to support TLS using Let's Encrypt)
+
+# acme.json used to store the information that we will receive from Let's Encrypt 
+# (ACME is the name of the protocol used to communicate with Let's Encrypt to manage certificates)
+
+touch /tmp/acme.json
+
+# Lock down the permissions on this file so that only the root user can read and write to this file. 
+# If you don't do this, Traefik will fail to start.
+
+chmod 600 /tmp/acme.json
+
+# traefik directory for logs
+mkdir /tmp/traefik
+
+# Exposed ports:
+#	- 8666 --> Traefik dashboard interface (internally 8080)
+#	- 80 --> PHP app
+#	- 443 --> PHP app
+# Sharing docker.sock file into the container so that the Traefik process can listen for changes to containers
+
+#docker run -d -p 8666:8080 -p 80:80 -p 443:443 -v /var/run/docker.sock:/var/run/docker.sock \  
+#        -v traefik:/data -v $PWD/conf/traefik.toml:/traefik.toml -v $PWD/conf/acme.json:/acme.json traefik  
+
 docker run -d -p 8666:8080 -p 80:80 -p 443:443 -v /var/run/docker.sock:/var/run/docker.sock \  
-        -v traefik:/data -v $PWD/conf/traefik.toml:/traefik.toml -v $PWD/conf/acme.json:/acme.json traefik  
+        -v /tmp/traefik:/data -v $PWD/etc/traefik.toml:/traefik.toml -v /tmp/acme.json:/acme.json traefik  
+
+
+
 
 Jenkins:  
 docker run -p 8080 -d -v /data/jenkins/var/jenkins_home:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):/$  
