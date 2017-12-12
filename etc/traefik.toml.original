@@ -8,13 +8,13 @@ defaultEntryPoints = ["http", "https"]
   address = ":443"
     [entryPoints.https.tls]
 [acme]
-email = "jose@corbacho.net"
+email = "hat@yogosha.com"
 storageFile = "acme.json"
 entrypoint = "https"
 #onDemand=true
 [[acme.domains]]
-main = "localhost"
-sans = ["staging.localhost","bb.localhost", "prod.localhost"]
+main = "programmez.yogosha.com"
+sans = ["staging.programmez.yogosha.com","bb.programmez.yogosha.com", "prod.programmez.yogosha.com"]
 
 graceTimeOut = 10
 logLevel = "DEBUG"
@@ -28,5 +28,5 @@ ReadOnly = true
 
 [docker]
 endpoint = "unix:///var/run/docker.sock"
-domain = "localhost"
+domain = "programmez.yogosha.com"
 watch = true
