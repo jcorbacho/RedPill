@@ -27,6 +27,8 @@
         ├── production.sql
         └── staging.sql
 
+Demo video: https://youtu.be/aaeiCdTwDVo?list=PLUOjNfYgonUvu4EZ4m6OxVovCd18M6jTv
+
 
 docker registry:
 	docker run -d -p 5000:5000 --restart=always --name registry registry
