@@ -25,6 +25,13 @@ stage('SonarQube analysis') {
     }
 }
 
+
+// Prepares global containers
+def php = docker.build("${appname}-app", './src/php/')
+def zap = docker.image('owasp/zap2docker-weekly')
+def db = docker.image('mysql/mysql-server:5.6')
+
+
 stage ('Building env') {
   def state = "staging"
 
@@ -41,15 +48,10 @@ stage ('Building env') {
     sh "rm -rf /data/*"
     sh "cp -r ./src/sql/staging.sql /data/"
   }
-  // Prepares containers
-  def php = docker.build("${appname}-app", './src/php/')
-  //def zap = docker.image('owasp/zap2docker-weekly')
-  def db = docker.image('mysql/mysql-server:5.6')
 
   // Defines staging param
   def db_param = "-e 'MYSQL_RANDOM_ROOT_PASSWORD=yes' -e 'MYSQL_USER=user' -e 'MYSQL_PASSWORD=password' -e 'MYSQL_DATABASE=sqli' --label 'traefik.enable=false'"
   def app_param = "--label traefik.backend='app-${state}' --label traefik.port='80' --label traefik.protocol='http' --label traefik.weight='10' --label traefik.frontend.rule='Host:${state}.localhost' --label traefik.frontend.passHostHeader='true' --label traefik.priority='10' -e BUILD_STAGE=${state}"
-
 
   // Starts Staging instances
   def staging_db = db.run("${db_param} -v ${appname}-${state}-db:/docker-entrypoint-initdb.d/")
@@ -59,7 +61,6 @@ stage ('Building env') {
 
   // Runs quick security check
 stage ('Test with OWASP ZapProxy'){
-  def zap = docker.image('owasp/zap2docker-weekly')
   zap.inside("--link ${staging_app.id}:app -v ${appname}-zap:/zap/wrk") {
           println('Waiting for server to be ready')
           sh "until \$(curl --output /dev/null --silent --head --fail http://app/index.php); do printf '.'; sleep 5; done"
