@@ -1,20 +1,21 @@
 ##Content
+
 .
 ├── etc
 │   ├── traefik.toml
 │   └── traefik.toml.original
 ├── jenkins-docker
 │   └── Dockerfile
-├── Jenkinsfile --> DevOpsSec World
+├── Jenkinsfile
 ├── LICENSE
-├── Makefile --> Ops World
+├── Makefile
 ├── README.md
 ├── sonar-docker
 │   └── Dockerfile
 └── src
     ├── php
     │   ├── debian.png
-    │   ├── Dockerfile --> Dev World
+    │   ├── Dockerfile
     │   ├── docker.png
     │   ├── index.php
     │   ├── jenkins.png
@@ -26,6 +27,9 @@
     └── sql
         ├── production.sql
         └── staging.sql
+
+6 directories, 20 files
+
 
 Demo video: https://youtu.be/aaeiCdTwDVo?list=PLUOjNfYgonUvu4EZ4m6OxVovCd18M6jTv
 
