@@ -28,6 +28,7 @@ stage('SonarQube analysis') {
 
 
 // global vars
+def busy
 def php
 def zap
 def db
@@ -42,7 +43,7 @@ stage ('Building env') {
   state = "staging"
 
   // Puts app stuff
-  def busy = docker.image('busybox');
+  busy = docker.image('busybox');
   // When the host directory of a bind-mounted volume doesn’t exist, 
   // Docker will automatically create this directory on the host for you.
   busy.inside("-v ${appname}-app:/data"){
