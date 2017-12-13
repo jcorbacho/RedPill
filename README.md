@@ -1,34 +1,35 @@
 ##Content
 
-.
-├── etc
-│   ├── traefik.toml
-│   └── traefik.toml.original
-├── jenkins-docker
-│   └── Dockerfile
-├── Jenkinsfile
-├── LICENSE
-├── Makefile
-├── README.md
-├── sonar-docker
-│   └── Dockerfile
-└── src
-    ├── php
-    │   ├── debian.png
-    │   ├── Dockerfile
-    │   ├── docker.png
-    │   ├── index.php
-    │   ├── jenkins.png
-    │   ├── lamp.jpg
-    │   ├── owasp.png
-    │   ├── scaleway.svg
-    │   ├── star.png
-    │   └── traefik.png
-    └── sql
-        ├── production.sql
-        └── staging.sql
+# Project tree
 
-6 directories, 20 files
+.
+ * [LICENSE](./LICENSE)
+ * [Makefile](./Makefile)
+ * [sonar-docker](./sonar-docker)
+   * [Dockerfile](./sonar-docker/Dockerfile)
+ * [etc](./etc)
+   * [traefik.toml.original](./etc/traefik.toml.original)
+   * [traefik.toml](./etc/traefik.toml)
+ * [jenkins-docker](./jenkins-docker)
+   * [Dockerfile](./jenkins-docker/Dockerfile)
+ * [src](./src)
+   * [sql](./src/sql)
+     * [production.sql](./src/sql/production.sql)
+     * [staging.sql](./src/sql/staging.sql)
+   * [php](./src/php)
+   * [debian.png](./src/php/debian.png)
+   * [Dockerfile](./src/php/Dockerfile)
+   * [docker.png](./src/php/docker.png)
+   * [index.php](./src/php/index.php)
+   * [jenkins.png](./src/php/jenkins.png)
+   * [lamp.jpg](./src/php/lamp.jpg)
+   * [owasp.png](./src/php/owasp.png)
+   * [scaleway.svg](./src/php/scaleway.svg)
+   * [star.png](./src/php/star.png)
+   * [traefik.png](./src/php/traefik.png)
+ * [Jenkinsfile](./Jenkinsfile)
+ * [README.md](./README.md)
+ * [tree-md](./tree-md)
 
 
 Demo video: https://youtu.be/aaeiCdTwDVo?list=PLUOjNfYgonUvu4EZ4m6OxVovCd18M6jTv
