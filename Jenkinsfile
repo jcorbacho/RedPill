@@ -26,14 +26,20 @@ stage('SonarQube analysis') {
 }
 
 
-// Prepares global containers
-def php = docker.build("${appname}-app", './src/php/')
-def zap = docker.image('owasp/zap2docker-weekly')
-def db = docker.image('mysql/mysql-server:5.6')
+
+// global vars
+def php
+def zap
+def db
+def state
+def db_param
+def app_param
+def staging_db
+def staging_app
 
 
 stage ('Building env') {
-  def state = "staging"
+  state = "staging"
 
   // Puts app stuff
   def busy = docker.image('busybox');
@@ -49,16 +55,19 @@ stage ('Building env') {
     sh "cp -r ./src/sql/staging.sql /data/"
   }
 
+  // Prepares global containers
+  php = docker.build("${appname}-app", './src/php/')
+  zap = docker.image('owasp/zap2docker-weekly')
+  db = docker.image('mysql/mysql-server:5.6')
+
+  // Defines staging param
+  db_param = "-e 'MYSQL_RANDOM_ROOT_PASSWORD=yes' -e 'MYSQL_USER=user' -e 'MYSQL_PASSWORD=password' -e 'MYSQL_DATABASE=sqli' --label 'traefik.enable=false'"
+  app_param = "--label traefik.backend='app-${state}' --label traefik.port='80' --label traefik.protocol='http' --label traefik.weight='10' --label traefik.frontend.rule='Host:${state}.localhost' --label traefik.frontend.passHostHeader='true' --label traefik.priority='10' -e BUILD_STAGE=${state}"
+
+  // Starts Staging instances
+  staging_db = db.run("${db_param} -v ${appname}-${state}-db:/docker-entrypoint-initdb.d/")
+  staging_app = php.run ("-P ${app_param} -v ${appname}-app:/var/www/html  --link ${staging_db.id}:db")
 }
-// Defines staging param
-def db_param = "-e 'MYSQL_RANDOM_ROOT_PASSWORD=yes' -e 'MYSQL_USER=user' -e 'MYSQL_PASSWORD=password' -e 'MYSQL_DATABASE=sqli' --label 'traefik.enable=false'"
-def app_param = "--label traefik.backend='app-${state}' --label traefik.port='80' --label traefik.protocol='http' --label traefik.weight='10' --label traefik.frontend.rule='Host:${state}.localhost' --label traefik.frontend.passHostHeader='true' --label traefik.priority='10' -e BUILD_STAGE=${state}"
-
-
-// Starts Staging instances
-def staging_db = db.run("${db_param} -v ${appname}-${state}-db:/docker-entrypoint-initdb.d/")
-def staging_app = php.run ("-P ${app_param} -v ${appname}-app:/var/www/html  --link ${staging_db.id}:db")
-
 
 
   // Runs quick security check
