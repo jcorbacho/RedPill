@@ -115,7 +115,7 @@ Sonar:
 
 
 sqli :  
-http://chocobo.yogosha.com:32808/?id=1%20UNION%20SELECT%20username,%20nom,%20prenom,%20email%20FROM%20users;  
+http://prod.localhost/?id=1%20UNION%20SELECT%20username,%20nom,%20prenom,%20email%20FROM%20users;  
 
 correct:  
 $user_id = intval($_GET['id']);  
