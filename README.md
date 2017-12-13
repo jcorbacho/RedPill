@@ -91,7 +91,7 @@ Providing docker binary and docker socket for being able to execute docker insid
 	--label traefik.port='8080' \
 	--label traefik.protocol='http' \  
         --label traefik.weight='10'\
-	--label traefik.frontend.rule='Host:chocobo.yogosha.com' \  
+	--label traefik.frontend.rule='Host:localhost' \  
         --label traefik.frontend.passHostHeader='true' \
 	--label traefik.priority='10' \
 	jenkins-ejoscor:latest

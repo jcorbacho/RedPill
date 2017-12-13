@@ -13,8 +13,6 @@ stage ('Pull img'){
 
 stage ('Test build'){
   sh 'make build'
-  sh 'hostname' 
-  sh 'docker images'
 }
 
 stage('SonarQube analysis') {
@@ -32,12 +30,9 @@ stage ('Building env') {
 
   // Puts app stuff
   def busy = docker.image('busybox');
-
   // When the host directory of a bind-mounted volume doesn’t exist, 
   // Docker will automatically create this directory on the host for you.
   busy.inside("-v ${appname}-app:/data"){
-    sh "pwd"
-    sh "ls -la"
     sh "cp -r ./src/php/* /data/"
     sh "chown -R www-data:www-data /data"
   }
@@ -48,7 +43,7 @@ stage ('Building env') {
   }
   // Prepares containers
   def php = docker.build("${appname}-app", './src/php/')
-  def zap = docker.image('owasp/zap2docker-weekly')
+  //def zap = docker.image('owasp/zap2docker-weekly')
   def db = docker.image('mysql/mysql-server:5.6')
 
   // Defines staging param
@@ -64,6 +59,7 @@ stage ('Building env') {
 
   // Runs quick security check
 stage ('Test with OWASP ZapProxy'){
+  def zap = docker.image('owasp/zap2docker-weekly')
   zap.inside("--link ${staging_app.id}:app -v ${appname}-zap:/zap/wrk") {
           println('Waiting for server to be ready')
           sh "until \$(curl --output /dev/null --silent --head --fail http://app/index.php); do printf '.'; sleep 5; done"
